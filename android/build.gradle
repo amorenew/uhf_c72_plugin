@@ -37,6 +37,6 @@ dependencies {
     //rx Android for updating status
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
     implementation 'io.reactivex.rxjava2:rxjava:2.2.19'
-    implementation files('/Users/apple/Desktop/sdks/flutter/bin/cache/artifacts/engine/android-x64/flutter.jar')
+    //implementation files('/Users/apple/Desktop/sdks/flutter/bin/cache/artifacts/engine/android-x64/flutter.jar')
 
 }
