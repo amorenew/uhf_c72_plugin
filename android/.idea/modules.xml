@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/android-uhf_plugin.iml" filepath="$PROJECT_DIR$/android-uhf_plugin.iml" group="uhf_plugin" />
+      <module fileurl="file://$PROJECT_DIR$/uhf_plugin.iml" filepath="$PROJECT_DIR$/uhf_plugin.iml" group="uhf_plugin" />
+    </modules>
+  </component>
+</project>
