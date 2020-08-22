@@ -1,7 +1,7 @@
-name: uhf_rt510_plugin
-description: A flutter plugin for UHF RT510 to read UHF Cards.
+name: uhf_c72_plugin
+description: A flutter plugin for UHF C72 to read UHF Cards.
 version: 0.0.1
-homepage: https://github.com/amorenew/uhf_rt510_plugin.git
+homepage: https://github.com/amorenew/uhf_c72_plugin.git
 
 environment:
   sdk: ">=2.7.2 <3.0.0"
@@ -29,7 +29,7 @@ flutter:
   plugin:
     platforms:
       android:
-        package: com.amorenew.rt510.uhf_plugin
+        package: com.amorenew.c72.uhf_plugin
         pluginClass: UHFPlugin
 
   # To add assets to your plugin package, add an assets section, like this:

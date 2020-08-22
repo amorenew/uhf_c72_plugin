@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 
 import 'package:flutter/services.dart';
-import 'package:uhf_rt510_plugin/uhf_rt510_plugin.dart';
-import 'package:uhf_rt510_plugin/tag_epc.dart';
+import 'package:uhf_c72_plugin/uhf_c72_plugin.dart';
+import 'package:uhf_c72_plugin/tag_epc.dart';
 
 void main() => runApp(MyApp());
 
@@ -31,15 +31,15 @@ class _MyAppState extends State<MyApp> {
     String platformVersion;
     // Platform messages may fail, so we use a try/catch PlatformException.
     try {
-      platformVersion = await UhfRT510Plugin.platformVersion;
+      platformVersion = await UhfC72Plugin.platformVersion;
     } on PlatformException {
       platformVersion = 'Failed to get platform version.';
     }
-    UhfRT510Plugin.connectedStatusStream
+    UhfC72Plugin.connectedStatusStream
         .receiveBroadcastStream()
         .listen(updateIsConnected);
-    UhfRT510Plugin.tagsStatusStream.receiveBroadcastStream().listen(updateTags);
-    await UhfRT510Plugin.connect;
+    UhfC72Plugin.tagsStatusStream.receiveBroadcastStream().listen(updateTags);
+    await UhfC72Plugin.connect;
     // If the widget was removed from the tree while the asynchronous platform
     // message was in flight, we want to discard the reply rather than calling
     // setState to update our non-existent appearance.
@@ -95,12 +95,12 @@ class _MyAppState extends State<MyApp> {
                   RaisedButton(
                       child: Text('Call connect'),
                       onPressed: () async {
-                        await UhfRT510Plugin.connect;
+                        await UhfC72Plugin.connect;
                       }),
                   RaisedButton(
                       child: Text('Call is Connected'),
                       onPressed: () async {
-                        bool isConnected = await UhfRT510Plugin.isConnected;
+                        bool isConnected = await UhfC72Plugin.isConnected;
                         setState(() {
                           this._isConnected = isConnected;
                         });
@@ -124,12 +124,12 @@ class _MyAppState extends State<MyApp> {
                         style: TextStyle(color: Colors.white),
                       ),
                       onPressed: () async {
-                        await UhfRT510Plugin.start;
+                        await UhfC72Plugin.start;
                       }),
                   /* RaisedButton(
                       child: Text('Call isStarted'),
                       onPressed: () async {
-                        bool isStarted = await UhfRT510Plugin.isStarted;
+                        bool isStarted = await UhfC72Plugin.isStarted;
                         setState(() {
                           this._isStarted = isStarted;
                         });
@@ -153,12 +153,12 @@ class _MyAppState extends State<MyApp> {
                     style: TextStyle(color: Colors.white),
                   ),
                   onPressed: () async {
-                    await UhfRT510Plugin.stop;
+                    await UhfC72Plugin.stop;
                   }),
               /*   RaisedButton(
                       child: Text('Call Close'),
                       onPressed: () async {
-                        await UhfRT510Plugin.close;
+                        await UhfC72Plugin.close;
                       }),
                 ],
               ),
@@ -175,7 +175,7 @@ class _MyAppState extends State<MyApp> {
                     style: TextStyle(color: Colors.white),
                   ),
                   onPressed: () async {
-                    await UhfRT510Plugin.clearData;
+                    await UhfC72Plugin.clearData;
                     setState(() {
                       _data = [];
                     });
@@ -183,7 +183,7 @@ class _MyAppState extends State<MyApp> {
               /* RaisedButton(
                       child: Text('Call is Empty Tags'),
                       onPressed: () async {
-                        bool isEmptyTags = await UhfRT510Plugin.isEmptyTags;
+                        bool isEmptyTags = await UhfC72Plugin.isEmptyTags;
                         setState(() {
                           this._isEmptyTags = isEmptyTags;
                         });
@@ -216,7 +216,7 @@ class _MyAppState extends State<MyApp> {
                         style: TextStyle(color: Colors.white),
                       ),
                       onPressed: () async {
-                        await UhfRT510Plugin.setPowerLevel(
+                        await UhfC72Plugin.setPowerLevel(
                             powerLevelController.text);
                       }),
                 ],
@@ -247,7 +247,7 @@ class _MyAppState extends State<MyApp> {
                         style: TextStyle(color: Colors.white),
                       ),
                       onPressed: () async {
-                        await UhfRT510Plugin.setWorkArea(workAreaController.text);
+                        await UhfC72Plugin.setWorkArea(workAreaController.text);
                       }),
                 ],
               ),

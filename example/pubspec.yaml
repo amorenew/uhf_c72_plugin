@@ -17,7 +17,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  uhf_rt510_plugin:
+  uhf_c72_plugin:
     path: ../
 
 # For information on the generic Dart part of this file, see the

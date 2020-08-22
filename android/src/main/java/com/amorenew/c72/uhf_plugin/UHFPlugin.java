@@ -1,4 +1,4 @@
-package com.amorenew.rt510.uhf_plugin;
+package com.amorenew.c72.uhf_plugin;
 
 import com.handheld.UHFHelper;
 import com.handheld.UHFListener;
