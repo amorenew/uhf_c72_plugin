@@ -1,7 +1,7 @@
 package com.amorenew.c72.uhf_plugin;
 
-import com.handheld.UHFHelper;
-import com.handheld.UHFListener;
+import com.amorenew.c72.uhf_plugin.helper.UHFHelper;
+import com.amorenew.c72.uhf_plugin.helper.UHFListener;
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.plugin.common.BinaryMessenger;
@@ -24,7 +24,8 @@ import io.reactivex.subjects.PublishSubject;
 public class UHFPlugin implements FlutterPlugin, MethodCallHandler {
 
     private static final String CHANNEL_IsStarted = "isStarted";
-    private static final String CHANNEL_Start = "start";
+    private static final String CHANNEL_StartSingle = "startSingle";
+    private static final String CHANNEL_StartContinuous = "startContinuous";
     private static final String CHANNEL_Stop = "stop";
     private static final String CHANNEL_ClearData = "clearData";
     private static final String CHANNEL_IsEmptyTags = "isEmptyTags";
@@ -33,36 +34,10 @@ public class UHFPlugin implements FlutterPlugin, MethodCallHandler {
     private static final String CHANNEL_IsConnected = "isConnected";
     private static final String CHANNEL_SETPOWERLEVEL = "setPowerLevel";
     private static final String CHANNEL_SETWORKAREA = "setWorkArea";
-
-    private static PublishSubject<Boolean> connectedStatus = PublishSubject.create();
-    private static PublishSubject<String> tagsStatus = PublishSubject.create();
     private static final String CHANNEL_ConnectedStatus = "ConnectedStatus";
     private static final String CHANNEL_TagsStatus = "TagsStatus";
-
-
-    @Override
-    public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
-        final MethodChannel channel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(), "uhf_plugin");
-        initConnectedEvent(flutterPluginBinding.getBinaryMessenger());
-        initReadEvent(flutterPluginBinding.getBinaryMessenger());
-
-        channel.setMethodCallHandler(new UHFPlugin());
-        UHFHelper.getInstance().init(new UHFListener() {
-            @Override
-            public void onRead(String tagsJson) {
-//                for (Map<String, Object> map : tagsList) {
-//                    String tag = TagKey.getTag(map);
-                if (tagsJson != null)
-                    tagsStatus.onNext(tagsJson);
-//                }
-            }
-
-            @Override
-            public void onConnect(boolean isConnected, int powerLevel) {
-                connectedStatus.onNext(isConnected);
-            }
-        });
-    }
+    private static PublishSubject<Boolean> connectedStatus = PublishSubject.create();
+    private static PublishSubject<String> tagsStatus = PublishSubject.create();
 
     // This static function is optional and equivalent to onAttachedToEngine. It supports the old
     // pre-Flutter-1.12 Android projects. You are encouraged to continue supporting
@@ -79,14 +54,12 @@ public class UHFPlugin implements FlutterPlugin, MethodCallHandler {
         initReadEvent(registrar.messenger());
         channel.setMethodCallHandler(new UHFPlugin());
 
-        UHFHelper.getInstance().init(new UHFListener() {
+        UHFHelper.getInstance().init();
+        UHFHelper.getInstance().setUhfListener(new UHFListener() {
             @Override
             public void onRead(String tagsJson) {
-//                for (Map<String, Object> map : tagsList) {
-//                    String tag = TagKey.getTag(map);
                 if (tagsJson != null)
                     tagsStatus.onNext(tagsJson);
-//                }
             }
 
             @Override
@@ -94,61 +67,30 @@ public class UHFPlugin implements FlutterPlugin, MethodCallHandler {
                 connectedStatus.onNext(isConnected);
             }
         });
-
-
     }
 
     @Override
-    public void onMethodCall(@NonNull MethodCall call, @NonNull Result result) {
-        handleMethods(call, result);
+    public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
+        final MethodChannel channel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(), "uhf_plugin");
+        initConnectedEvent(flutterPluginBinding.getBinaryMessenger());
+        initReadEvent(flutterPluginBinding.getBinaryMessenger());
+
+        channel.setMethodCallHandler(new UHFPlugin());
+        UHFHelper.getInstance().init();
+        UHFHelper.getInstance().setUhfListener(new UHFListener() {
+            @Override
+            public void onRead(String tagsJson) {
+                if (tagsJson != null)
+                    tagsStatus.onNext(tagsJson);
+            }
+
+            @Override
+            public void onConnect(boolean isConnected, int powerLevel) {
+                connectedStatus.onNext(isConnected);
+            }
+        });
     }
 
-    private void handleMethods(MethodCall call, Result result) {
-        switch (call.method) {
-            case "getPlatformVersion":
-                result.success("Android " + android.os.Build.VERSION.RELEASE);
-                break;
-            case CHANNEL_IsStarted:
-                result.success(UHFHelper.getInstance().isStarted());
-                break;
-            case CHANNEL_Start:
-                UHFHelper.getInstance().start();
-                result.success(true);
-                break;
-            case CHANNEL_Stop:
-                UHFHelper.getInstance().stop();
-                result.success(true);
-                break;
-            case CHANNEL_ClearData:
-                UHFHelper.getInstance().clearData();
-                result.success(true);
-                break;
-            case CHANNEL_IsEmptyTags:
-                result.success(UHFHelper.getInstance().isEmptyTags());
-                break;
-            case CHANNEL_Close:
-                UHFHelper.getInstance().close();
-                result.success(true);
-                break;
-            case CHANNEL_Connect:
-                UHFHelper.getInstance().connect();
-                result.success(true);
-                break;
-            case CHANNEL_IsConnected:
-                result.success(UHFHelper.getInstance().isConnected());
-                break;
-            case CHANNEL_SETPOWERLEVEL:
-                String powerLevel = call.argument("value");
-                result.success(UHFHelper.getInstance().setPowerLevel(powerLevel));
-                break;
-            case CHANNEL_SETWORKAREA:
-                String workArea = call.argument("value");
-                result.success(UHFHelper.getInstance().setWorkArea(workArea));
-                break;
-            default:
-                result.notImplemented();
-        }
-    }
 
     private static void initConnectedEvent(BinaryMessenger messenger) {
         final EventChannel scannerEventChannel = new EventChannel(messenger, CHANNEL_ConnectedStatus);
@@ -226,6 +168,60 @@ public class UHFPlugin implements FlutterPlugin, MethodCallHandler {
 
 
     @Override
+    public void onMethodCall(@NonNull MethodCall call, @NonNull Result result) {
+        handleMethods(call, result);
+    }
+
+    private void handleMethods(MethodCall call, Result result) {
+        switch (call.method) {
+            case "getPlatformVersion":
+                result.success("Android " + android.os.Build.VERSION.RELEASE);
+                break;
+            case CHANNEL_IsStarted:
+                result.success(UHFHelper.getInstance().isStarted());
+                break;
+            case CHANNEL_StartSingle:
+                result.success(UHFHelper.getInstance().start(true));
+                break;
+            case CHANNEL_StartContinuous:
+                result.success(UHFHelper.getInstance().start(false));
+                break;
+            case CHANNEL_Stop:
+                result.success(UHFHelper.getInstance().stop());
+                break;
+            case CHANNEL_ClearData:
+                UHFHelper.getInstance().clearData();
+                result.success(true);
+                break;
+            case CHANNEL_IsEmptyTags:
+                result.success(UHFHelper.getInstance().isEmptyTags());
+                break;
+            case CHANNEL_Close:
+                UHFHelper.getInstance().close();
+                result.success(true);
+                break;
+            case CHANNEL_Connect:
+                result.success(UHFHelper.getInstance().connect());
+                break;
+            case CHANNEL_IsConnected:
+                result.success(UHFHelper.getInstance().isConnected());
+                break;
+            case CHANNEL_SETPOWERLEVEL:
+                String powerLevel = call.argument("value");
+                result.success(UHFHelper.getInstance().setPowerLevel(powerLevel));
+                break;
+            case CHANNEL_SETWORKAREA:
+                String workArea = call.argument("value");
+                result.success(UHFHelper.getInstance().setWorkArea(workArea));
+                break;
+            default:
+                result.notImplemented();
+        }
+    }
+
+    @Override
     public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
     }
+
+
 }

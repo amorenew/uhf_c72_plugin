@@ -18,8 +18,12 @@ class UhfC72Plugin {
     return _channel.invokeMethod('isStarted');
   }
 
-  static Future<bool> get start async {
-    return _channel.invokeMethod('start');
+  static Future<bool> get startSingle async {
+    return _channel.invokeMethod('startSingle');
+  }
+
+  static Future<bool> get startContinuous async {
+    return _channel.invokeMethod('startContinuous');
   }
 
   static Future<bool> get stop async {
@@ -51,7 +55,7 @@ class UhfC72Plugin {
         .invokeMethod('setPowerLevel', <String, String>{'value': value});
   }
 
-  static Future<int> setWorkArea(String value) async {
+  static Future<bool> setWorkArea(String value) async {
     return _channel
         .invokeMethod('setWorkArea', <String, String>{'value': value});
   }

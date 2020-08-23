@@ -50,14 +50,23 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
+  List<String> _logs = [];
+    void log(String msg) {
+    setState(() {
+      _logs.add(msg);
+    });
+  }
+
   List<TagEpc> _data = [];
   void updateTags(dynamic result) {
+    log('update tags');
     setState(() {
       _data = TagEpc.parseTags(result);
     });
   }
 
   void updateIsConnected(dynamic isConnected) {
+    log('connected $isConnected');
     //setState(() {
     _isConnected = isConnected;
     //});
@@ -120,11 +129,25 @@ class _MyAppState extends State<MyApp> {
                       ),
                       color: Colors.blueAccent,
                       child: Text(
-                        'Call Start',
+                        'Call Start Single',
                         style: TextStyle(color: Colors.white),
                       ),
                       onPressed: () async {
-                        await UhfC72Plugin.start;
+                        bool isStarted = await UhfC72Plugin.startSingle;
+                        log('Start signle $isStarted');
+                      }),
+                  RaisedButton(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18.0),
+                      ),
+                      color: Colors.blueAccent,
+                      child: Text(
+                        'Call Start Continuous Reading',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      onPressed: () async {
+                        bool isStarted = await UhfC72Plugin.startContinuous;
+                        log('Start Continuous $isStarted');
                       }),
                   /* RaisedButton(
                       child: Text('Call isStarted'),
@@ -153,7 +176,8 @@ class _MyAppState extends State<MyApp> {
                     style: TextStyle(color: Colors.white),
                   ),
                   onPressed: () async {
-                    await UhfC72Plugin.stop;
+                    bool isStopped = await UhfC72Plugin.stop;
+                    log('Stop $isStopped');
                   }),
               /*   RaisedButton(
                       child: Text('Call Close'),
@@ -216,13 +240,14 @@ class _MyAppState extends State<MyApp> {
                         style: TextStyle(color: Colors.white),
                       ),
                       onPressed: () async {
-                        await UhfC72Plugin.setPowerLevel(
+                        bool isSetPower = await UhfC72Plugin.setPowerLevel(
                             powerLevelController.text);
+                        log('isSetPower $isSetPower');
                       }),
                 ],
               ),
               Text(
-                'powers {"26dbm", "24", "20", "18", "17", "16"}',
+                'powers {"5" : "30" dBm}',
                 style: TextStyle(color: Colors.blue.shade800, fontSize: 12),
               ),
               Row(
@@ -247,12 +272,14 @@ class _MyAppState extends State<MyApp> {
                         style: TextStyle(color: Colors.white),
                       ),
                       onPressed: () async {
-                        await UhfC72Plugin.setWorkArea(workAreaController.text);
+                        bool isSetWorkArea = await UhfC72Plugin.setWorkArea(
+                            workAreaController.text);
+                        log('isSetWorkArea $isSetWorkArea');
                       }),
                 ],
               ),
               Text(
-                'Work Area 1 China2 - 2 USA - 3 Europe - 4 China1 - 5 Korea',
+                'Work Area 1 China 920MHz - 2 China 840 - 3 ETSI 865\n4 Fixed 915 - 5 USA 902',
                 style: TextStyle(color: Colors.blue.shade800, fontSize: 12),
               ),
               Container(
@@ -261,6 +288,18 @@ class _MyAppState extends State<MyApp> {
                 margin: EdgeInsets.symmetric(vertical: 8),
                 color: Colors.blueAccent,
               ),
+              ..._logs.map((String msg) => Card(
+                    color: Colors.blue.shade50,
+                    child: Container(
+                      width: 330,
+                      alignment: Alignment.center,
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        'Log: $msg',
+                        style: TextStyle(color: Colors.blue.shade800),
+                      ),
+                    ),
+                  )),
               ..._data.map((TagEpc tag) => Card(
                     color: Colors.blue.shade50,
                     child: Container(

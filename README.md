@@ -1,19 +1,12 @@
 # uhf_plugin
 
-A flutter plugin for Tablet Alps ax6737 to read UHF Cards.
+A flutter plugin for UHF type C72 to read UHF Cards.
 
 #### Library Pub link
 https://pub.dev/packages/uhf_plugin
 
 
 ### Getting Started
-
-##### In your Gradle exclude Flutter so files because libary is working in 32bit mode
-##### Only use release apk because running from IDE will not exclude 64bit files
-    `packagingOptions {
-        exclude 'lib/arm64-v8a/libflutter.so'
-        exclude 'lib/arm64-v8a/libapp.so'
-    }`
 
 - Import the library:
    `import 'package:uhf_c72_plugin/uhf_c72_plugin.dart';`
@@ -26,9 +19,13 @@ https://pub.dev/packages/uhf_plugin
 
     `await UhfPlugin.isConnected;`
 
-- Start reading data
+- Start reading data a single UHF card
 
-    `await UhfPlugin.start;`
+    `await UhfPlugin.startSingle;`
+
+- Start reading data multi 'continuous' UHF cards
+
+    `await UhfPlugin.startContinuous;`
     
 - Is started reading
 
@@ -50,10 +47,18 @@ https://pub.dev/packages/uhf_plugin
 
    `await UhfPlugin.isEmptyTags;`
 
-- Listen to connection status
+- Set Power level (5 dBm : 30 dBm use string numbers)
 
-   `UhfPlugin.connectedStatusStream.receiveBroadcastStream().listen(updateIsConnected);`
-   updateIsConnected should listen to bool value
+   `await UhfPlugin.setPowerLevel;`
+
+- Set Work area 
+1 > China Area 920~925MHz
+2 > Chin2a Area 840~845MHz
+3 > ETSI Area 865~868MHz
+4 > Fixed Area 915MHz
+5 > United States Area 902~928MHz
+-use string numbers
+   `await UhfPlugin.setWorkArea;`
 
 - Listen to tags status
 
