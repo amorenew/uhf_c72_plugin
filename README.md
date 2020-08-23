@@ -71,5 +71,4 @@ https://pub.dev/packages/uhf_plugin
         });
       }
    ```
-![alt text](https://github.com/amorenew/uhf_c72_plugin/raw/master/sample1.png)
 
