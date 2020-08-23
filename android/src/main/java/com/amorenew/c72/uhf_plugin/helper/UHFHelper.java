@@ -70,7 +70,9 @@ public class UHFHelper {
 
         if (mReader != null) {
             isConnect= mReader.init();
-            uhfListener.onConnect(isConnect,0);
+            //mReader.setFrequencyMode(2);
+//mReader.setPower(29);
+uhfListener.onConnect(isConnect,0);
             return isConnect;
         }
         uhfListener.onConnect(false,0);
@@ -125,8 +127,10 @@ public class UHFHelper {
 
     public boolean setPowerLevel(String level) {
         //5 dBm : 30 dBm
-        if (mReader != null)
-            return mReader.setPower(Integer.parseInt(level));
+        if (mReader != null){
+            boolean isSet= mReader.setPower(Integer.parseInt(level));
+            return isSet;
+        }
         return false;
     }
 
@@ -137,7 +141,7 @@ public class UHFHelper {
         //Fixed Area 915MHz
         //United States Area 902~928MHz
         if (mReader != null)
-            return mReader.setFrequencyMode((byte) Integer.parseInt(area));
+            return mReader.setFrequencyMode(Integer.parseInt(area));
         return false;
     }
 
@@ -242,7 +246,7 @@ public class UHFHelper {
                     } else {
                         strResult = "";
                     }
-                    Log.i("data", "EPC:" + res.getEPC() + "|" + strResult);
+                    Log.i("data", "c" + res.getEPC() + "|" + strResult);
                     Message msg = handler.obtainMessage();
                     msg.obj = strResult + "EPC:" + res.getEPC() + "@" + res.getRssi();
 
