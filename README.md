@@ -52,12 +52,7 @@ https://pub.dev/packages/uhf_plugin
    `await UhfPlugin.setPowerLevel;`
 
 - Set Work area 
-1 > China Area 920~925MHz
-2 > Chin2a Area 840~845MHz
-3 > ETSI Area 865~868MHz
-4 > Fixed Area 915MHz
-5 > United States Area 902~928MHz
--use string numbers
+Area Values { "1", "2" 4", "8", "22", "50", "51", "52", "128"}
    `await UhfPlugin.setWorkArea;`
 
 - Listen to tags status

@@ -12,7 +12,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 
@@ -24,8 +23,7 @@ public class UHFHelper {
     private boolean isStart = false;
     private boolean isConnect = false;
     //private boolean isSingleRead = false;
-    private ArrayList<HashMap<String, String>> tagList;
-    private HashMap<String, String> map;
+    private HashMap<String, EPC> tagList;
 
     private UHFHelper() {
     }
@@ -37,8 +35,12 @@ public class UHFHelper {
     }
 
     //public RFIDWithUHFUART getReader() {
-     //   return mReader;
+    //   return mReader;
     //}
+
+    public static boolean isEmpty(CharSequence cs) {
+        return cs == null || cs.length() == 0;
+    }
 
     public void setUhfListener(UHFListener uhfListener) {
         this.uhfListener = uhfListener;
@@ -47,7 +49,7 @@ public class UHFHelper {
     public void init() {
         // this.context = context;
         //this.uhfListener = uhfListener;
-        tagList = new ArrayList<>();
+        tagList = new HashMap<>();
         clearData();
         handler = new Handler() {
             @Override
@@ -64,18 +66,18 @@ public class UHFHelper {
         try {
             mReader = RFIDWithUHFUART.getInstance();
         } catch (Exception ex) {
-            uhfListener.onConnect(false,0);
+            uhfListener.onConnect(false, 0);
             return false;
         }
 
         if (mReader != null) {
-            isConnect= mReader.init();
+            isConnect = mReader.init();
             //mReader.setFrequencyMode(2);
 //mReader.setPower(29);
-uhfListener.onConnect(isConnect,0);
+            uhfListener.onConnect(isConnect, 0);
             return isConnect;
         }
-        uhfListener.onConnect(false,0);
+        uhfListener.onConnect(false, 0);
         return false;
     }
 
@@ -114,6 +116,7 @@ uhfListener.onConnect(isConnect,0);
             return mReader.stopInventory();
         }
         isStart = false;
+        clearData();
         return false;
     }
 
@@ -121,15 +124,15 @@ uhfListener.onConnect(isConnect,0);
         isStart = false;
         if (mReader != null) {
             mReader.free();
-            isConnect=false;
+            isConnect = false;
         }
+        clearData();
     }
 
     public boolean setPowerLevel(String level) {
         //5 dBm : 30 dBm
-        if (mReader != null){
-            boolean isSet= mReader.setPower(Integer.parseInt(level));
-            return isSet;
+        if (mReader != null) {
+            return mReader.setPower(Integer.parseInt(level));
         }
         return false;
     }
@@ -140,11 +143,11 @@ uhfListener.onConnect(isConnect,0);
         //ETSI Area 865~868MHz
         //Fixed Area 915MHz
         //United States Area 902~928MHz
+        //{ "1", "2" 4", "8", "22", "50", "51", "52", "128"}
         if (mReader != null)
             return mReader.setFrequencyMode(Integer.parseInt(area));
         return false;
     }
-
 
     /**
      * 添加EPC到列表中
@@ -153,38 +156,28 @@ uhfListener.onConnect(isConnect,0);
      */
     private void addEPCToList(String epc, String rssi) {
         if (!TextUtils.isEmpty(epc)) {
-            int index = checkIsExist(epc);
+            EPC tag = new EPC();
 
-            map = new HashMap<String, String>();
+            tag.setId("");
+            tag.setEpc(epc);
+            tag.setCount(String.valueOf(1));
+            tag.setRssi(rssi);
 
-            map.put(TagKey.ID, "");
-            map.put(TagKey.EPC, epc);
-            map.put(TagKey.COUNT, String.valueOf(1));
-            map.put(TagKey.RSSI, rssi);
-
-            // mContext.getAppContext().uhfQueue.offer(epc + "\t 1");
-
-            if (index == -1) {
-                tagList.add(map);
-            } else {
-                int tagCount = Integer.parseInt(
-                        Objects.requireNonNull(tagList.get(index).get(TagKey.COUNT)), 10) + 1;
-
-                map.put(TagKey.COUNT, String.valueOf(tagCount));
-
-                tagList.set(index, map);
-
+            if (tagList.containsKey(epc)) {
+                int tagCount = Integer.parseInt(Objects.requireNonNull(tagList.get(epc)).getCount()) + 1;
+                tag.setCount(String.valueOf(tagCount));
             }
+            tagList.put(epc, tag);
+
             final JSONArray jsonArray = new JSONArray();
 
-            for (int i = 0; i < tagList.size(); i++) {
-                HashMap<String, String> map = tagList.get(i);
+            for (EPC epcTag : tagList.values()) {
                 JSONObject json = new JSONObject();
                 try {
-                    json.put(TagKey.ID, map.get(TagKey.ID));
-                    json.put(TagKey.EPC, map.get(TagKey.EPC));
-                    json.put(TagKey.RSSI, map.get(TagKey.RSSI));
-                    json.put(TagKey.COUNT, map.get(TagKey.COUNT));
+                    json.put(TagKey.ID, Objects.requireNonNull(epcTag).getId());
+                    json.put(TagKey.EPC, epcTag.getEpc());
+                    json.put(TagKey.RSSI, epcTag.getRssi());
+                    json.put(TagKey.COUNT, epcTag.getCount());
                     jsonArray.put(json);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -196,30 +189,6 @@ uhfListener.onConnect(isConnect,0);
         }
     }
 
-    /**
-     * 判断EPC是否在列表中
-     *
-     * @param strEPC 索引
-     * @return
-     */
-    public int checkIsExist(String strEPC) {
-        int existFlag = -1;
-        if (strEPC == null || strEPC.length() == 0) {
-            return existFlag;
-        }
-        String tempStr = "";
-        for (int i = 0; i < tagList.size(); i++) {
-            HashMap<String, String> temp = new HashMap<String, String>();
-            temp = tagList.get(i);
-            tempStr = temp.get("tagUii");
-            if (strEPC.equals(tempStr)) {
-                existFlag = i;
-                break;
-            }
-        }
-        return existFlag;
-    }
-
     public boolean isEmptyTags() {
         return tagList != null && !tagList.isEmpty();
     }
@@ -227,7 +196,8 @@ uhfListener.onConnect(isConnect,0);
     public boolean isStarted() {
         return isStart;
     }
-   public boolean isConnected() {
+
+    public boolean isConnected() {
         return isConnect;
     }
 
