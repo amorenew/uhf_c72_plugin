@@ -10,8 +10,7 @@ class UhfC72Plugin {
     return version;
   }
 
-  static const EventChannel connectedStatusStream =
-      EventChannel('ConnectedStatus');
+  static const EventChannel connectedStatusStream = EventChannel('ConnectedStatus');
   static const EventChannel tagsStatusStream = EventChannel('TagsStatus');
 
   static Future<bool?> get isStarted async {
@@ -51,12 +50,10 @@ class UhfC72Plugin {
   }
 
   static Future<bool?> setPowerLevel(String value) async {
-    return _channel
-        .invokeMethod('setPowerLevel', <String, String>{'value': value});
+    return _channel.invokeMethod('setPowerLevel', <String, String>{'value': value});
   }
 
   static Future<bool?> setWorkArea(String value) async {
-    return _channel
-        .invokeMethod('setWorkArea', <String, String>{'value': value});
+    return _channel.invokeMethod('setWorkArea', <String, String>{'value': value});
   }
 }
