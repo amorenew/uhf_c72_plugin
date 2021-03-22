@@ -1,10 +1,10 @@
 name: uhf_c72_plugin
 description: A flutter plugin for UHF C72 to read UHF Cards.
-version: 0.0.2
+version: 0.1.0
 homepage: https://github.com/amorenew/uhf_c72_plugin.git
 
 environment:
-  sdk: ">=2.7.2 <3.0.0"
+  sdk: '>=2.12.0 <3.0.0'
   # Flutter versions prior to 1.12 did not support the
   # flutter.plugin.platforms map.
   flutter: ">=1.12.0 <2.0.0"
