@@ -7,10 +7,10 @@ class TagEpc {
   final String rssi;
 
   TagEpc({
-    this.id,
-    this.epc,
-    this.count,
-    this.rssi,
+    required this.id,
+    required this.epc,
+    required this.count,
+    required this.rssi,
   });
 
   factory TagEpc.fromMap(Map<String, dynamic> json) => TagEpc(
