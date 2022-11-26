@@ -1,3 +1,0 @@
-linter:
-  rules:
-    - prefer_spread_collections
