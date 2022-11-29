@@ -39,9 +39,8 @@ dependencies {
     //rx Android for updating status
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
     implementation 'io.reactivex.rxjava2:rxjava:2.2.19'
+    implementation files('libs/DeviceAPI_ver20220518_release.aar')
     implementation files('libs/xUtils-2.5.5.jar')
-    implementation files('libs/jxl.jar')
-    implementation files('libs/cw-deviceapi20191022.jar')
     //implementation files('/Users/apple/Desktop/sdks/flutter/bin/cache/artifacts/engine/android-x64/flutter.jar')
 
 }
