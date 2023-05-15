@@ -103,12 +103,12 @@ class _MyAppState extends State<MyApp> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
-                  RaisedButton(
+                  MaterialButton(
                       child: Text('Call connect'),
                       onPressed: () async {
                         await UhfC72Plugin.connect;
                       }),
-                  RaisedButton(
+                  MaterialButton(
                       child: Text('Call is Connected'),
                       onPressed: () async {
                         bool isConnected = await UhfC72Plugin.isConnected;
@@ -125,7 +125,7 @@ class _MyAppState extends State<MyApp> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
-                  RaisedButton(
+                  MaterialButton(
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(18.0),
                       ),
@@ -138,7 +138,7 @@ class _MyAppState extends State<MyApp> {
                         bool isStarted = await UhfC72Plugin.startSingle;
                         log('Start signle $isStarted');
                       }),
-                  RaisedButton(
+                  MaterialButton(
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(18.0),
                       ),
@@ -151,7 +151,7 @@ class _MyAppState extends State<MyApp> {
                         bool isStarted = await UhfC72Plugin.startContinuous;
                         log('Start Continuous $isStarted');
                       }),
-                  /* RaisedButton(
+                  /* MaterialButton(
                       child: Text('Call isStarted'),
                       onPressed: () async {
                         bool isStarted = await UhfC72Plugin.isStarted;
@@ -168,7 +168,7 @@ class _MyAppState extends State<MyApp> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[*/
-              RaisedButton(
+              MaterialButton(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(18.0),
                   ),
@@ -181,7 +181,7 @@ class _MyAppState extends State<MyApp> {
                     bool isStopped = await UhfC72Plugin.stop;
                     log('Stop $isStopped');
                   }),
-              /*   RaisedButton(
+              /*   MaterialButton(
                       child: Text('Call Close'),
                       onPressed: () async {
                         await UhfC72Plugin.close;
@@ -191,7 +191,7 @@ class _MyAppState extends State<MyApp> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[*/
-              RaisedButton(
+              MaterialButton(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(18.0),
                   ),
@@ -206,7 +206,7 @@ class _MyAppState extends State<MyApp> {
                       _data = [];
                     });
                   }),
-              /* RaisedButton(
+              /* MaterialButton(
                       child: Text('Call is Empty Tags'),
                       onPressed: () async {
                         bool isEmptyTags = await UhfC72Plugin.isEmptyTags;
@@ -232,7 +232,7 @@ class _MyAppState extends State<MyApp> {
                       decoration: InputDecoration(labelText: 'Power Level'),
                     ),
                   ),
-                  RaisedButton(
+                  MaterialButton(
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(18.0),
                       ),
@@ -264,7 +264,7 @@ class _MyAppState extends State<MyApp> {
                       decoration: InputDecoration(labelText: 'Work Area'),
                     ),
                   ),
-                  RaisedButton(
+                  MaterialButton(
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(18.0),
                       ),
