@@ -2,9 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/android-uhf_plugin.iml" filepath="$PROJECT_DIR$/android-uhf_plugin.iml" group="uhf_plugin" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/com.amorenew.c72.uhf_plugin-uhf_plugin.iml" filepath="$PROJECT_DIR$/.idea/modules/com.amorenew.c72.uhf_plugin-uhf_plugin.iml" group="uhf_plugin" />
-      <module fileurl="file://$PROJECT_DIR$/uhf_plugin.iml" filepath="$PROJECT_DIR$/uhf_plugin.iml" group="uhf_plugin" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/uhf_plugin.iml" filepath="$PROJECT_DIR$/.idea/modules/uhf_plugin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/uhf_plugin.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/uhf_plugin.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/uhf_plugin.main.iml" filepath="$PROJECT_DIR$/.idea/modules/uhf_plugin.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/uhf_plugin.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/uhf_plugin.unitTest.iml" />
     </modules>
   </component>
 </project>

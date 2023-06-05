@@ -1,3 +1,5 @@
+// ignore_for_file: unused_field
+
 import 'package:flutter/material.dart';
 import 'dart:async';
 
@@ -28,7 +30,7 @@ class _MyAppState extends State<MyApp> {
 
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> initPlatformState() async {
-    String platformVersion;
+    String? platformVersion;
     // Platform messages may fail, so we use a try/catch PlatformException.
     try {
       platformVersion = await UhfC72Plugin.platformVersion;
@@ -48,7 +50,7 @@ class _MyAppState extends State<MyApp> {
     if (!mounted) return;
 
     setState(() {
-      _platformVersion = platformVersion;
+      _platformVersion = platformVersion!;
     });
   }
 
@@ -135,7 +137,7 @@ class _MyAppState extends State<MyApp> {
                         style: TextStyle(color: Colors.white),
                       ),
                       onPressed: () async {
-                        bool isStarted = await UhfC72Plugin.startSingle;
+                        bool? isStarted = await UhfC72Plugin.startSingle;
                         log('Start signle $isStarted');
                       }),
                   MaterialButton(
@@ -148,7 +150,7 @@ class _MyAppState extends State<MyApp> {
                         style: TextStyle(color: Colors.white),
                       ),
                       onPressed: () async {
-                        bool isStarted = await UhfC72Plugin.startContinuous;
+                        bool? isStarted = await UhfC72Plugin.startContinuous;
                         log('Start Continuous $isStarted');
                       }),
                   /* MaterialButton(
@@ -178,7 +180,7 @@ class _MyAppState extends State<MyApp> {
                     style: TextStyle(color: Colors.white),
                   ),
                   onPressed: () async {
-                    bool isStopped = await UhfC72Plugin.stop;
+                    bool? isStopped = await UhfC72Plugin.stop;
                     log('Stop $isStopped');
                   }),
               /*   MaterialButton(
@@ -242,8 +244,9 @@ class _MyAppState extends State<MyApp> {
                         style: TextStyle(color: Colors.white),
                       ),
                       onPressed: () async {
-                        bool isSetPower = await UhfC72Plugin.setPowerLevel(
-                            powerLevelController.text);
+                        bool? isSetPower = await UhfC72Plugin.setPowerLevel(
+                          powerLevelController.text,
+                        );
                         log('isSetPower $isSetPower');
                       }),
                 ],
@@ -274,8 +277,9 @@ class _MyAppState extends State<MyApp> {
                         style: TextStyle(color: Colors.white),
                       ),
                       onPressed: () async {
-                        bool isSetWorkArea = await UhfC72Plugin.setWorkArea(
-                            workAreaController.text);
+                        bool? isSetWorkArea = await UhfC72Plugin.setWorkArea(
+                          workAreaController.text,
+                        );
                         log('isSetWorkArea $isSetWorkArea');
                       }),
                 ],

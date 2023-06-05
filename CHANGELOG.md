@@ -1,3 +1,7 @@
+## 1.0.0
+
+* Migrated to Flutter 3
+
 ## 0.1.0
 
 * Migrated to Null Safety

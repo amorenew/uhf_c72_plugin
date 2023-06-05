@@ -2,27 +2,29 @@ group 'com.amorenew.c72.uhf_plugin'
 version '1.0'
 
 buildscript {
+    ext.kotlin_version = '1.7.10'
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.0.1'
+        classpath 'com.android.tools.build:gradle:7.3.0'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
 
 rootProject.allprojects {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
 }
 
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 33
 
     defaultConfig {
         minSdkVersion 20
@@ -31,7 +33,6 @@ android {
     lintOptions {
         disable 'InvalidPackage'
     }
-    buildToolsVersion '30.0.2'
 }
 
 dependencies {
