@@ -33,6 +33,8 @@ android {
     lintOptions {
         disable 'InvalidPackage'
     }
+
+    namespace "com.amorenew.c72.uhf_plugin"
 }
 
 dependencies {
